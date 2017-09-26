@@ -43,7 +43,7 @@ extern NSString * _Nonnull const kIQActionSheetAttributesForHighlightedStateKey;
 @property(nullable, nonatomic, strong) NSDictionary<NSString*,id> *cancelButtonAttributes UI_APPEARANCE_SELECTOR;
 
 
-@property(nullable, nonatomic, strong) IQActionSheetTitleBarButtonItem *titleButton;
+@property(nullable, nonatomic, strong) UIBarButtonItem *titleButton;
 
 
 @property(nullable, nonatomic, strong) UIBarButtonItem *doneButton;

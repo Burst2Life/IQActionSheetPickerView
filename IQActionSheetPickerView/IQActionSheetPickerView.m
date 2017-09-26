@@ -75,6 +75,10 @@
             _actionToolbar.doneButton.target = self;
             _actionToolbar.doneButton.action = @selector(pickerDoneClicked:);
             _actionToolbar.titleButton.title = title;
+           _actionToolbar.titleButton.enabled = NO;
+            _actionToolbar.titleButton.tintColor = [UIColor lightGrayColor];
+            _actionToolbar.titleButton.target = self;
+            _actionToolbar.titleButton.action= @selector(titleButtonClicked:);
         }
 
         //UIPickerView
@@ -229,6 +233,18 @@
     }
     
     [self dismiss];
+}
+
+-(void)enableTitleButton:(BOOL)enable {
+    _actionToolbar.titleButton.enabled = enable;
+    _actionToolbar.titleButton.tintColor = [UIColor colorWithRed:0.07 green:0.85 blue:0.85 alpha:1.0];
+}
+
+-(void)titleButtonClicked:(IQActionSheetTitleBarButtonItem*)titleButton {
+    if ([self.delegate respondsToSelector:@selector(actionSheetPickerView:didSelectTitleButton:)]) {
+        [self.delegate actionSheetPickerView:self didSelectTitleButton:_actionToolbar.titleButton.title];
+    }
+   [self dismiss];
 }
 
 #pragma mark - IQActionSheetPickerStyleDatePicker / IQActionSheetPickerStyleDateTimePicker / IQActionSheetPickerStyleTimePicker

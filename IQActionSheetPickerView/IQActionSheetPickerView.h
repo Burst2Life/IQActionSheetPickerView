@@ -63,6 +63,7 @@ typedef NS_ENUM(NSUInteger, IQActionSheetPickerStyle) {
 - (void)actionSheetPickerView:(nonnull IQActionSheetPickerView *)pickerView didChangeRow:(NSInteger)row inComponent:(NSInteger)component;
 - (void)actionSheetPickerViewDidCancel:(nonnull IQActionSheetPickerView *)pickerView;
 - (void)actionSheetPickerViewWillCancel:(nonnull IQActionSheetPickerView *)pickerView;
+- (void)actionSheetPickerView:(IQActionSheetPickerView *)pickerView didSelectTitleButton:(NSString*)title;
 @end
 
 /*!
@@ -114,6 +115,8 @@ typedef NS_ENUM(NSUInteger, IQActionSheetPickerStyle) {
  Dismiss picker view with slide down animation, completion block will be called on animation completion.
  */
 -(void)dismissWithCompletion:(nullable void (^)(void))completion;
+
+-(void)enableTitleButton:(BOOL)enable;
 
 /*!
  Disable dismiss action sheet when touching blank area at the top.

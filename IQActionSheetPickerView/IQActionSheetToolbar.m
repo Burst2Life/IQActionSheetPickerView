@@ -71,7 +71,7 @@ NSString * const kIQActionSheetAttributesForHighlightedStateKey = @"kIQActionShe
     _cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:nil action:nil];
     
     //  Create a title button to show on toolBar for the title you need.
-    _titleButton =[[IQActionSheetTitleBarButtonItem alloc] initWithTitle:nil];
+    _titleButton = [[UIBarButtonItem alloc] initWithTitle:nil style:UIBarButtonItemStylePlain target:nil action:nil];
 
     //  Create a done button to show on keyboard to resign it. Adding a selector to resign it.
     _doneButton =[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
@@ -106,6 +106,13 @@ NSString * const kIQActionSheetAttributesForHighlightedStateKey = @"kIQActionShe
     {
         _titleButton.customView.frame = CGRectZero;
     }
+    
+    UIBarButtonItem *fixedSpace =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                      target:nil
+                                                      action:nil];
+    fixedSpace.width = 8;
+    [items addObject:fixedSpace];
     
     //  Adding button to toolBar.
     [self setItems:items];
