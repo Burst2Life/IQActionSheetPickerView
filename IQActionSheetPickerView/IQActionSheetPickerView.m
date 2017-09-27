@@ -235,9 +235,9 @@
     [self dismiss];
 }
 
--(void)enableTitleButton:(BOOL)enable {
+-(void)enableTitleButton:(BOOL)enable color:(UIColor*)color {
     _actionToolbar.titleButton.enabled = enable;
-    _actionToolbar.titleButton.tintColor = [UIColor colorWithRed:0.07 green:0.85 blue:0.85 alpha:1.0];
+    _actionToolbar.titleButton.tintColor = color;
 }
 
 -(void)titleButtonClicked:(IQActionSheetTitleBarButtonItem*)titleButton {
