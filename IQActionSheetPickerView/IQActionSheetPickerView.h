@@ -116,7 +116,7 @@ typedef NS_ENUM(NSUInteger, IQActionSheetPickerStyle) {
  */
 -(void)dismissWithCompletion:(nullable void (^)(void))completion;
 
--(void)enableTitleButton:(BOOL)enable;
+-(void)enableTitleButton:(BOOL)enable color:(UIColor*)color;
 
 /*!
  Disable dismiss action sheet when touching blank area at the top.
