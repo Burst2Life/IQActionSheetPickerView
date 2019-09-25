@@ -30,6 +30,7 @@
 #import <UIKit/UIWindow.h>
 #import <UIKit/UIScreen.h>
 #import <UIKit/UILabel.h>
+#import <UIKit/UITableView.h>
 
 @interface IQActionSheetPickerView ()<UIPickerViewDataSource,UIPickerViewDelegate>
 
