@@ -187,47 +187,29 @@
     {
         case IQActionSheetPickerStyleTextPicker:
         {
-            NSMutableArray<NSNumber*> *selectedIndexes = [[NSMutableArray alloc] init];
+            NSMutableArray *selectedTitles = [[NSMutableArray alloc] init];
 
             for (NSInteger component = 0; component<_pickerView.numberOfComponents; component++)
             {
                 NSInteger row = [_pickerView selectedRowInComponent:component];
                 
-                [selectedIndexes addObject:@(row)];
+                if (row!= -1)
+                {
+                    [selectedTitles addObject:_titlesForComponents[component][row]];
+                }
+                else
+                {
+                    [selectedTitles addObject:[NSNull null]];
+                }
             }
             
-            [self setSelectedIndexes:selectedIndexes];
+            [self setSelectedTitles:selectedTitles];
             
-            if ([self.delegate respondsToSelector:@selector(actionSheetPickerView:didSelectTitlesAtIndexes:)])
+            if ([self.delegate respondsToSelector:@selector(actionSheetPickerView:didSelectTitles:)])
             {
-                [self.delegate actionSheetPickerView:self didSelectTitlesAtIndexes:selectedIndexes];
+                [self.delegate actionSheetPickerView:self didSelectTitles:selectedTitles];
             }
-            else
-            {
-                NSMutableArray<NSString*> *selectedTitles = [[NSMutableArray alloc] init];
-                
-                for (NSUInteger component = 0; component<selectedIndexes.count; component++)
-                {
-                    NSInteger row = [selectedIndexes[component] integerValue];
-
-                    if (row != -1)
-                    {
-                        [selectedTitles addObject:_titlesForComponents[component][row]];
-                    }
-                    else
-                    {
-                        [selectedTitles addObject:@""];
-                    }
-                }
-                
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                if ([self.delegate respondsToSelector:@selector(actionSheetPickerView:didSelectTitles:)])
-                {
-                    [self.delegate actionSheetPickerView:self didSelectTitles:selectedTitles];
-                }
-#pragma clang diagnostic pop
-            }
+            
         }
             break;
         case IQActionSheetPickerStyleDatePicker:
@@ -305,25 +287,44 @@
     [_pickerView reloadAllComponents];
 }
 
--(void)setSelectedIndexes:(NSArray<NSNumber *> *)selectedIndexes
+-(void)setSelectedTitles:(NSArray *)selectedTitles
 {
-    [self setSelectedIndexes:selectedIndexes animated:NO];
+    [self setSelectedTitles:selectedTitles animated:NO];
 }
 
--(NSArray<NSNumber *> *)selectedIndexes
+-(NSArray *)selectedTitles
 {
     if (_actionSheetPickerStyle == IQActionSheetPickerStyleTextPicker)
     {
-        NSMutableArray<NSNumber*> *selectedIndexes = [[NSMutableArray alloc] init];
+        NSMutableArray *selectedTitles = [[NSMutableArray alloc] init];
         
-        for (NSInteger component = 0; component<_pickerView.numberOfComponents; component++)
+        NSUInteger totalComponent = _pickerView.numberOfComponents;
+        
+        for (NSInteger component = 0; component<totalComponent; component++)
         {
-            NSInteger row = [_pickerView selectedRowInComponent:component];
+            NSInteger selectedRow = [_pickerView selectedRowInComponent:component];
             
-            [selectedIndexes addObject:@(row)];
+            if (selectedRow == -1)
+            {
+                [selectedTitles addObject:[NSNull null]];
+            }
+            else
+            {
+                NSArray *items = _titlesForComponents[component];
+                
+                if ([items count] > selectedRow)
+                {
+                    id selectTitle = items[selectedRow];
+                    [selectedTitles addObject:selectTitle];
+                }
+                else
+                {
+                    [selectedTitles addObject:[NSNull null]];
+                }
+            }
         }
         
-        return selectedIndexes;
+        return selectedTitles;
     }
     else
     {
@@ -331,58 +332,40 @@
     }
 }
 
--(void)setSelectedIndexes:(NSArray<NSNumber *> *)selectedIndexes animated:(BOOL)animated
+-(void)setSelectedTitles:(NSArray *)selectedTitles animated:(BOOL)animated
 {
     if (_actionSheetPickerStyle == IQActionSheetPickerStyleTextPicker)
     {
-        NSUInteger totalComponent = MIN(MIN(selectedIndexes.count, _pickerView.numberOfComponents),_titlesForComponents.count);
+        NSUInteger totalComponent = MIN(selectedTitles.count, _pickerView.numberOfComponents);
         
         for (NSInteger component = 0; component<totalComponent; component++)
         {
             NSArray *items = _titlesForComponents[component];
-            NSUInteger selectIndex = [selectedIndexes[component] unsignedIntegerValue];
+            id selectTitle = selectedTitles[component];
             
-            if (selectIndex < items.count)
+            if ([items containsObject:selectTitle])
             {
-                [_pickerView selectRow:selectIndex inComponent:component animated:animated];
+                NSUInteger rowIndex = [items indexOfObject:selectTitle];
+                [_pickerView selectRow:rowIndex inComponent:component animated:animated];
             }
         }
     }
 }
 
--(NSInteger)selectedRowInComponent:(NSUInteger)component
+-(void)selectIndexes:(NSArray *)indexes animated:(BOOL)animated
 {
     if (_actionSheetPickerStyle == IQActionSheetPickerStyleTextPicker)
     {
-        NSUInteger totalComponent = MIN(_titlesForComponents.count, _pickerView.numberOfComponents);
+        NSUInteger totalComponent = MIN(indexes.count, _pickerView.numberOfComponents);
         
-        if (component < totalComponent)
+        for (NSInteger component = 0; component<totalComponent; component++)
         {
-            return [_pickerView selectedRowInComponent:component];
-        }
-    }
-
-    return -1;
-}
-
--(void)selectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self selectRowAtIndexPath:indexPath animated:NO];
-}
-
--(void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated
-{
-    if (_actionSheetPickerStyle == IQActionSheetPickerStyleTextPicker)
-    {
-        NSUInteger totalComponent = MIN(_titlesForComponents.count, _pickerView.numberOfComponents);
-        
-        if (indexPath.section < totalComponent)
-        {
-            NSArray *items = _titlesForComponents[indexPath.section];
+            NSArray *items = _titlesForComponents[component];
+            NSUInteger selectIndex = [indexes[component] unsignedIntegerValue];
             
-            if (indexPath.row < items.count)
+            if (selectIndex < items.count)
             {
-                [_pickerView selectRow:indexPath.row inComponent:indexPath.section animated:animated];
+                [_pickerView selectRow:selectIndex inComponent:component animated:animated];
             }
         }
     }

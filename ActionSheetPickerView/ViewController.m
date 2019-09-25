@@ -14,21 +14,6 @@
 
 @implementation ViewController
 
-- (void)actionSheetPickerView:(nonnull IQActionSheetPickerView *)pickerView didChangeRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    if (pickerView.tag == 2)
-    {
-        if (component == 0)
-        {
-            [pickerView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[pickerView selectedRowInComponent:0] inSection:1] animated:YES];
-        }
-        else if (component == 1)
-        {
-            [pickerView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[pickerView selectedRowInComponent:1] inSection:0] animated:YES];
-        }
-    }
-}
-
 -(void)actionSheetPickerView:(IQActionSheetPickerView *)pickerView didSelectTitles:(NSArray *)titles
 {
     switch (pickerView.tag)
@@ -86,7 +71,7 @@
     pickerView.titlesForComponents = @[@[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12"],@[@"AM",@"PM"]];
 //    pickerView.actionToolbar.tintColor = [UIColor blueAppColor];
     
-    pickerView.selectedIndexes = @[@(4), @(1)];
+    pickerView.selectedTitles = @[@"5", @"PM"];
     [pickerView show];
 
     
